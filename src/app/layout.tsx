@@ -14,15 +14,29 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Fonivo – Recepcja AI dla prywatnych klinik medycznych",
+  title: "Fonivo - Recepcja AI dla prywatnych klinik medycznych",
   description:
     "Voice agent AI, który odbiera telefony Twojej kliniki 24/7. Sprawdza kalendarz, umawia wizyty, brzmi jak człowiek. Wdrożenie w 14 dni.",
+  keywords:
+    "voice ai, recepcja ai, voice agent, ai dla kliniki, automatyzacja recepcji, fonivo",
+  icons: {
+    icon: "/logo.png",
+  },
   openGraph: {
-    title: "Fonivo – Recepcja AI dla prywatnych klinik medycznych",
+    title: "Fonivo - Recepcja AI dla prywatnych klinik medycznych",
     description:
       "Voice agent AI dla Twojej kliniki. Odbiera 24/7. Wdrożenie w 14 dni.",
-    type: "website",
+    url: "https://fonivo.pl",
+    siteName: "Fonivo",
     locale: "pl_PL",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: "https://fonivo.pl",
   },
 };
 
