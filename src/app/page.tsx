@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useEffect, useRef, useCallback } from "react";
 /* eslint-disable @next/next/no-img-element */
 
 function fmt(n: number): string {
@@ -16,37 +16,6 @@ export default function Home() {
   const daysValRef = useRef<HTMLDivElement>(null);
   const lossRef = useRef<HTMLSpanElement>(null);
   const visitsRef = useRef<HTMLDivElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
-  const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-
-  const handleContactSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const data = {
-      name: (form.elements.namedItem("name") as HTMLInputElement).value,
-      clinic: (form.elements.namedItem("clinic") as HTMLInputElement).value,
-      email: (form.elements.namedItem("email") as HTMLInputElement).value,
-      phone: (form.elements.namedItem("phone") as HTMLInputElement).value,
-      message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
-    };
-
-    if (!data.name || !data.clinic || !data.email) return;
-
-    setFormStatus("loading");
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) throw new Error();
-      setFormStatus("success");
-      form.reset();
-    } catch {
-      setFormStatus("error");
-    }
-  }, []);
-
   const recalc = useCallback(() => {
     const calls = +(callsRef.current?.value ?? 80);
     const visitValue = +(valueRef.current?.value ?? 500);
@@ -820,69 +789,19 @@ export default function Home() {
                 className="section-title"
                 style={{ fontSize: "clamp(1.625rem,3.5vw,2.25rem)" }}
               >
-                Zostaw dane odezwiemy się
-                <br />w 24 godziny.
+                Zarezerwuj rozmowę
               </h2>
               <p className="section-lead">
-                Wolisz mail niż formularz? Wypełnij krótki formularz,
-                <br />a wrócimy do Ciebie z propozycją terminu.
+                Wybierz termin który Ci pasuje. 30 minut, konkretna rozmowa o
+                Twojej klinice.
               </p>
             </div>
 
-            <form
-              className="contact-form"
-              ref={formRef}
-              onSubmit={handleContactSubmit}
-            >
-              <div className="row">
-                <div>
-                  <label htmlFor="name">Imię i nazwisko</label>
-                  <input type="text" id="name" name="name" required />
-                </div>
-                <div>
-                  <label htmlFor="clinic">Nazwa kliniki</label>
-                  <input type="text" id="clinic" name="clinic" required />
-                </div>
-              </div>
-              <div className="row">
-                <div>
-                  <label htmlFor="email">Email</label>
-                  <input type="email" id="email" name="email" required />
-                </div>
-                <div>
-                  <label htmlFor="phone">Telefon</label>
-                  <input type="tel" id="phone" name="phone" />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="message">
-                  Krótko o Twojej klinice (opcjonalnie)
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  placeholder="Liczba lekarzy, lokalizacja, system rezerwacji..."
-                ></textarea>
-              </div>
-              <button type="submit" className="contact-submit" disabled={formStatus === "loading"}>
-                {formStatus === "loading" ? "Wysyłanie..." : "Wyślij"}
-              </button>
-              {formStatus === "success" && (
-                <p className="form-note" style={{ color: "#16a34a" }}>
-                  Dziękujemy! Odezwiemy się w 24 godziny.
-                </p>
-              )}
-              {formStatus === "error" && (
-                <p className="form-note" style={{ color: "#dc2626" }}>
-                  Coś poszło nie tak. Napisz do nas na kontakt@fonivo.pl
-                </p>
-              )}
-              <p className="form-note">
-                Wysyłając formularz wyrażasz zgodę na kontakt w sprawie demo.
-                Twoje dane przetwarzamy zgodnie z RODO szczegóły w Polityce
-                prywatności.
-              </p>
-            </form>
+            <div
+              className="calendly-inline-widget"
+              data-url="https://calendly.com/kontakt-fonivo/30min?hide_gdpr_banner=1&background_color=f8fafc&text_color=0f172a&primary_color=3b82f6"
+              style={{ minWidth: "320px", height: "700px" }}
+            ></div>
           </div>
         </div>
       </section>
