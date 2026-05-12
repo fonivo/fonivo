@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 /* eslint-disable @next/next/no-img-element */
 
 function fmt(n: number): string {
@@ -16,6 +16,36 @@ export default function Home() {
   const daysValRef = useRef<HTMLDivElement>(null);
   const lossRef = useRef<HTMLSpanElement>(null);
   const visitsRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const handleContactSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = {
+      name: (form.elements.namedItem("name") as HTMLInputElement).value,
+      clinic: (form.elements.namedItem("clinic") as HTMLInputElement).value,
+      email: (form.elements.namedItem("email") as HTMLInputElement).value,
+      phone: (form.elements.namedItem("phone") as HTMLInputElement).value,
+      message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
+    };
+
+    if (!data.name || !data.clinic || !data.email) return;
+
+    setFormStatus("loading");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error();
+      setFormStatus("success");
+      form.reset();
+    } catch {
+      setFormStatus("error");
+    }
+  }, []);
 
   const recalc = useCallback(() => {
     const calls = +(callsRef.current?.value ?? 80);
@@ -93,7 +123,7 @@ export default function Home() {
             <a href="#faq">FAQ</a>
             <a href="#contact">Kontakt</a>
           </div>
-          <a href="#cta" className="nav-cta">
+          <a href="https://calendly.com/kontakt-fonivo/30min" target="_blank" rel="noopener noreferrer" className="nav-cta">
             Zarezerwuj demo
             <svg
               width="14"
@@ -132,7 +162,7 @@ export default function Home() {
             Wdrażamy w 14 dni bez zmiany Twojego systemu.
           </p>
 
-          <a href="#cta" className="hero-cta">
+          <a href="https://calendly.com/kontakt-fonivo/30min" target="_blank" rel="noopener noreferrer" className="hero-cta">
             Zarezerwuj demo
             <span className="arrow">
               <svg
@@ -329,7 +359,7 @@ export default function Home() {
           </div>
 
           <div style={{ textAlign: "center", marginTop: "3rem" }}>
-            <a href="#cta" className="hero-cta">
+            <a href="https://calendly.com/kontakt-fonivo/30min" target="_blank" rel="noopener noreferrer" className="hero-cta">
               Zarezerwuj demo
               <span className="arrow">
                 <svg
@@ -512,7 +542,7 @@ export default function Home() {
                     przepadają w stratosferze.
                   </div>
 
-                  <a href="#contact" className="calc-cta">
+                  <a href="https://calendly.com/kontakt-fonivo/30min" target="_blank" rel="noopener noreferrer" className="calc-cta">
                     Zarezerwuj demo
                     <svg
                       width="14"
@@ -760,7 +790,7 @@ export default function Home() {
               Zarezerwuj 30 minut. Porozmawiamy o Twojej klinice. Pokażemy
               konkretną kalkulację i zaproponujemy spersonalizowanego agenta.
             </p>
-            <a href="#contact" className="final-cta">
+            <a href="https://calendly.com/kontakt-fonivo/30min" target="_blank" rel="noopener noreferrer" className="final-cta">
               Zarezerwuj demo
               <svg
                 width="18"
@@ -801,10 +831,8 @@ export default function Home() {
 
             <form
               className="contact-form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("Dziękujemy! Skontaktujemy się w 24 godziny.");
-              }}
+              ref={formRef}
+              onSubmit={handleContactSubmit}
             >
               <div className="row">
                 <div>
@@ -836,9 +864,19 @@ export default function Home() {
                   placeholder="Liczba lekarzy, lokalizacja, system rezerwacji..."
                 ></textarea>
               </div>
-              <button type="submit" className="contact-submit">
-                Wyślij i umów rozmowę →
+              <button type="submit" className="contact-submit" disabled={formStatus === "loading"}>
+                {formStatus === "loading" ? "Wysyłanie..." : "Wyślij"}
               </button>
+              {formStatus === "success" && (
+                <p className="form-note" style={{ color: "#16a34a" }}>
+                  Dziękujemy! Odezwiemy się w 24 godziny.
+                </p>
+              )}
+              {formStatus === "error" && (
+                <p className="form-note" style={{ color: "#dc2626" }}>
+                  Coś poszło nie tak. Napisz do nas na kontakt@fonivo.pl
+                </p>
+              )}
               <p className="form-note">
                 Wysyłając formularz wyrażasz zgodę na kontakt w sprawie demo.
                 Twoje dane przetwarzamy zgodnie z RODO szczegóły w Polityce

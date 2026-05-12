@@ -21,7 +21,7 @@ export default function PolitykaPrywatnosci() {
             <a href="/#faq">FAQ</a>
             <a href="/#contact">Kontakt</a>
           </div>
-          <a href="/#contact" className="nav-cta">
+          <a href="https://calendly.com/kontakt-fonivo/30min" target="_blank" rel="noopener noreferrer" className="nav-cta">
             Zarezerwuj demo&nbsp;&nbsp;→
           </a>
         </div>
