@@ -556,11 +556,7 @@ export default function Home() {
 
           <div className="audience-grid">
             <div className="aud-card">
-              <h4>Stomatologia premium</h4>
-              <span className="badge">Główny segment</span>
-            </div>
-            <div className="aud-card">
-              <h4>Implantologia &amp; ortodoncja</h4>
+              <h4>Stomatologia</h4>
               <span className="badge">Główny segment</span>
             </div>
             <div className="aud-card">
@@ -571,12 +567,16 @@ export default function Home() {
               <h4>Dermatologia</h4>
               <span className="badge">Aktywnie</span>
             </div>
+            <div className="aud-card">
+              <h4>Weterynaria</h4>
+              <span className="badge">Aktywnie</span>
+            </div>
             <div className="aud-card soon">
               <h4>Ginekologia</h4>
               <span className="badge">Wkrótce</span>
             </div>
             <div className="aud-card soon">
-              <h4>Weterynaria premium</h4>
+              <h4>Psychoterapia</h4>
               <span className="badge">Wkrótce</span>
             </div>
           </div>
